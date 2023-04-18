@@ -1,0 +1,4 @@
+230114
+***_fluctuate_quartile_comb2ref.pklに保存されている推定値をoptimized_single()で再現するには
+pklフォーマットで入力する必要がある。csvへの変換過程で型が変化するのが原因。
+見直しが必要かもしれない。
