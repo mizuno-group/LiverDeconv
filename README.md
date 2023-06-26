@@ -2,7 +2,9 @@
 liver-specific deconvolution model for mouse  
 
 ## Publication
-- Not yet  
+- peer-reviewed article  
+    - Not yet  
+- [preprint](https://www.biorxiv.org/content/10.1101/2023.04.19.537436v3)  
 
 ## Citation
 Please cite the following if you use any contents of this repository.  
