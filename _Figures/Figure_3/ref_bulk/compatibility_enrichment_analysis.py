@@ -33,7 +33,7 @@ import numpy as np
 from matplotlib import gridspec
 import pandas as pd
 
-neu_df = pd.read_pickle('C:/github/LiverDeconv/_Figures_new/Figure_4/data/neu_fluctuate_quartile_comb2ref.pkl')
+neu_df = pd.read_pickle('C:/github/LiverDeconv/_Figures/Figure_3/data/bulk/neu_fluctuate_quartile_comb2ref.pkl')
 neu_df.index = neu_df['pair']
 pairs = neu_df.index.tolist()
 
@@ -63,7 +63,7 @@ sys.path.append('C:/github/enan')
 from enan import GSEA
 import pandas as pd
 
-neu_df = pd.read_pickle('C:/github/LiverDeconv/_Figures_new/Figure_4/data/neu_fluctuate_quartile_comb2ref.pkl')
+neu_df = pd.read_pickle('C:/github/LiverDeconv/_Figures/Figure_3/data/bulk/neu_fluctuate_quartile_comb2ref.pkl')
 neu_df.index = neu_df['pair']
 pairs = neu_df.index.tolist()
 
@@ -98,7 +98,7 @@ sys.path.append('C:/github/enan')
 from enan import GSEA
 import pandas as pd
 
-mon_df = pd.read_pickle('C:/github/LiverDeconv/_Figures_new/Figure_4/data/mon_fluctuate_quartile_comb2ref.pkl')
+mon_df = pd.read_pickle('C:/github/LiverDeconv/_Figures/Figure_3/data/bulk/mon_fluctuate_quartile_comb2ref.pkl')
 mon_df.index = mon_df['pair']
 pairs = mon_df.index.tolist()
 
@@ -133,7 +133,7 @@ sys.path.append('C:/github/enan')
 from enan import GSEA
 import pandas as pd
 
-nk_df = pd.read_pickle('C:/github/LiverDeconv/_Figures_new/Figure_4/data/nk_fluctuate_quartile_comb2ref.pkl')
+nk_df = pd.read_pickle('C:/github/LiverDeconv/_Figures/Figure_3/data/bulk/nk_fluctuate_quartile_comb2ref.pkl')
 nk_df.index = nk_df['pair']
 pairs = nk_df.index.tolist()
 
@@ -168,7 +168,7 @@ sys.path.append('C:/github/enan')
 from enan import GSEA
 import pandas as pd
 
-eos_df = pd.read_pickle('C:/github/LiverDeconv/_Figures_new/Figure_4/data/eos_fluctuate_quartile_comb2ref.pkl')
+eos_df = pd.read_pickle('C:/github/LiverDeconv/_Figures/Figure_3/data/bulk/eos_fluctuate_quartile_comb2ref.pkl')
 eos_df.index = eos_df['pair']
 pairs = eos_df.index.tolist()
 
@@ -200,7 +200,7 @@ concat_res.to_csv('C:/github/LiverDeconv/_Figures_new/Figure_4/enrichment_result
 import glob
 import pandas as pd
 
-l = glob.glob('C:/github/LiverDeconv/_Figures_new/Figure_4/enrichment_result/*.csv')
+l = glob.glob('C:/github/LiverDeconv/_Figures/Figure_3/enrichment_result/*.csv')
 
 summary_df = pd.DataFrame()
 for p in l:

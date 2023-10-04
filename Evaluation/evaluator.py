@@ -48,8 +48,16 @@ class Evaluator():
         self.deconv_res = removed_df
         
     def set_validation_ref(self,val_df=None):
-        """
-        FACS population summary data
+        """Ground Truth data (e.g. FACS measured value)
+
+        Args:
+            val_df (DataFramr): Cell types are in rows and sample names are in columns. Defaults to None.
+                        Ctrl_1    Ctrl_2    Ctrl_3    Ctrl_4    Ctrl_7    Ctrl_8  
+            abT         0.144218  0.354034  0.128803  0.324972  0.220206  0.237484   
+            gdT         0.015701  0.044586  0.017606  0.031974  0.077327  0.081104   
+            NKT         0.207992  0.356555  0.173388  0.291621  0.057071  0.056809   
+            NK          0.073829  0.156051  0.084659  0.148015  0.069933  0.064143   
+            Monocyte    0.042073  0.037323  0.033776  0.038917  0.070734  0.088048  
         """
         if val_df is None:
             self.val_df = pd.read_csv('C:/github/LiverDeconv/Data/processed/facs_true_population.csv',index_col=0)
@@ -61,6 +69,8 @@ class Evaluator():
         process validation reference data
         """
         val_df = copy.deepcopy(self.val_df)
+        val_df.columns = [str(t) for t in val_df.columns.tolist()] # str
+        
         common_sample = list(set(val_df.columns.tolist()) & set(self.deconv_res.index.tolist()))
         target_res = self.deconv_res.loc[common_sample]
         self.deconv_res = target_res
@@ -74,12 +84,18 @@ class Evaluator():
         print("----------")
         self.cor_res = defaultdict(float)
         self.incorrect_res = defaultdict(list)
+
+        # select common sample
+        common = sorted(list(set(self.deconv_res.index.tolist()) & set(self.target_val_ref.index.tolist())))
+        deconv_res = self.deconv_res.loc[common]
+        target_val_ref = self.target_val_ref.loc[common]
+
         if simple:
             X1 = []
             X2 = []
             labels = []
             for i in range(len(dec_names)):
-                cor,x1,x2,label = p4v.plot_simple_corr(self.deconv_res,self.target_val_ref,dec_name=dec_names[i],val_name=val_names[i],do_plot=do_plot,dpi=dpi)
+                cor,x1,x2,label = p4v.plot_simple_corr(deconv_res,target_val_ref,dec_name=dec_names[i],val_name=val_names[i],do_plot=do_plot,dpi=dpi)
                 X1.append(x1)
                 X2.append(x2)
                 labels.append(label)
@@ -87,15 +103,15 @@ class Evaluator():
             self.total_cor = p4v.plot_multi_corr(X1=X1,X2=X2,labels=labels,dpi=dpi)
         else:
             for i in range(len(dec_names)):
-                x,y,cor = p4v.plot_value_corr(self.deconv_res,self.target_val_ref,dec_name=dec_names[i],val_name=val_names[i],
+                x,y,cor = p4v.plot_value_corr(deconv_res,target_val_ref,dec_name=dec_names[i],val_name=val_names[i],
                                               sort_index=sort_index,do_plot=do_plot,dpi=dpi,title=title)
                 #print(x,y)
                 self.cor_res[val_names[i][0]] += cor
                 if eval_all:
-                    incorrect = p4v.plot_mean_change(self.deconv_res,self.target_val_ref,dec_name=dec_names[i],val_name=val_names[i],do_plot=do_plot,dpi=dpi)
+                    incorrect = p4v.plot_mean_change(deconv_res,target_val_ref,dec_name=dec_names[i],val_name=val_names[i],do_plot=do_plot,dpi=dpi)
                     self.incorrect_res[val_names[i][0]].append(incorrect)
                     if do_plot:
-                        p4v.plot_box_change(self.deconv_res,self.target_val_ref,dec_name=dec_names[i],val_name=val_names[i],sort_index = sort_index,dpi=dpi)
+                        p4v.plot_box_change(deconv_res,target_val_ref,dec_name=dec_names[i],val_name=val_names[i],sort_index = sort_index,dpi=dpi)
                 else:
                     pass
     
