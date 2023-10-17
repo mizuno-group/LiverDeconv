@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 """
-Created on 2023-10-16 (Mon) 17:24:56
+Created on 2023-10-17 (Tue) 17:11:06
 
-evaluation with pseudo-bulk from scRNA-Seq
+evaluate with pseudo-bulk from scRNA-Seq
 
 @author: I.Azuma
 """
@@ -20,20 +20,21 @@ import seaborn as sns
 import matplotlib.pyplot as plt
 
 # %% deconvolution with bulk derived reference
+cell_name = "NK"
 # load data
-df_mix = pd.read_csv(Base_dir + '/_Figures/Figure_3/data/pseudo_bulk/27361x1000_ann.csv',index_col=0)
+df_mix = pd.read_csv('D:/GdriveSymbol/notebook/dry/Deconvolution/230906_revise/results/231002_sc_pseudo/fixwhole_27361x1000_ann.csv',index_col=0)
 fxn = lambda x : np.log2(x+1)
 df_log = df_mix.applymap(fxn)
 df_all = pd.read_csv(Base_dir+'/data/processed/ref_13types.csv',index_col=0)
 
 comb_df = pd.read_pickle(Base_dir + '/_Figures/Figure_3/data/bulk/nk_fluctuate_quartile_comb2ref.pkl')
-comb_df = comb_df.sort_values("NK",ascending=False)
+comb_df = comb_df.sort_values(cell_name,ascending=False)
 comb = comb_df['pair'].tolist()
 
-n = 5
+n = 10
 score_list = []
 for i in range(n):
-    target_cells = ['NK']+(list(comb[i])) # FIXME: -i-1 when consider bad combinations
+    target_cells = [cell_name]+(list(comb[])) # FIXME: -i-1 when consider bad combinations
     use_samples = []
     for t in df_all.columns.tolist():
         if t.split("_")[0] in target_cells:
@@ -52,24 +53,41 @@ for i in range(n):
     res = dat.get_res()
 
     # evaluation
-    val_df = pd.read_csv(Base_dir + '/_Figures/Figure_3/data/pseudo_bulk/sc10cell_proportion_df.csv',index_col=0).T
+    val_df = pd.read_csv('D:/GdriveSymbol/notebook/dry/Deconvolution/230906_revise/results/231002_sc_pseudo/sc10cell_proportion_fixwhole.csv',index_col=0).T
+    """
     # validation cell type selection
-    #val_df = val_df.loc[['Neutrophil','Monocyte','B','CD8','NK','Kupffer']]
-    #val_norm = val_df/(val_df.sum())
+    val_df = val_df.loc[['Neutrophil','Monocyte','B','CD8','NK','Kupffer']]
+    val_norm = val_df/(val_df.sum())
+    """
 
     ev = evaluator.Evaluator()
     ev.set_deconv_res(res_df=res,z_score=True)
     ev.set_validation_ref(val_df=val_df)
     ev.process_validation_ref(z_score=True)
 
-    ev.evaluate(dec_names=[["NK"]],
-                val_names=[["NK"]],title="NK",do_plot=True,simple=True,eval_all=False,dpi=100)
-    score_list.append(ev.cor_res.get('NK'))
+    ev.evaluate(dec_names=[[cell_name]],
+                val_names=[[cell_name]],title=cell_name,do_plot=True,simple=True,eval_all=False,dpi=100)
+    score_list.append(ev.cor_res.get(cell_name))
 print(score_list)
+
+"""
+neu_good: [0.9252, 0.8983, 0.821, 0.927, 0.8563, 0.9426, 0.862, 0.9165, 0.9369, 0.9462]
+neu_bad: [0.8814, 0.777, 0.7847, 0.8078, 0.8182, 0.8476, 0.8473, 0.8292, 0.8365, 0.7905]
+neu base: 0.882
+
+mon_good: [0.7514, 0.8675, 0.8352, 0.8116, 0.8286, 0.732, 0.7682, 0.8426, 0.8263, 0.7587]
+mon_bad: [0.8053, 0.6648, 0.8033, 0.8173, 0.7425, 0.9161, 0.9023, 0.8778, 0.8837, 0.896]
+mon base: 0.902
+
+nk_good: [0.9047, 0.8986, 0.8936, 0.9049, 0.9074, 0.9069, 0.9004, 0.9054, 0.9021, 0.9009]
+nk_bad: [0.9026, 0.8617, 0.9061, 0.8996, 0.684, 0.8987, 0.8873, 0.7669, 0.7778, 0.7544]
+nk base: 0.923
+
+"""
 
 # %% baseline
 # load data
-df_mix = pd.read_csv('D:/GdriveSymbol/notebook/dry/Deconvolution/230906_revise/results/231002_sc_pseudo/27361x1000_ann.csv',index_col=0)
+df_mix = pd.read_csv('D:/GdriveSymbol/notebook/dry/Deconvolution/230906_revise/results/231002_sc_pseudo/fixwhole_27361x1000_ann.csv',index_col=0)
 fxn = lambda x : np.log2(x+1)
 df_log = df_mix.applymap(fxn)
 df_all = pd.read_csv(Base_dir+'/data/processed/ref_13types.csv',index_col=0)
@@ -90,7 +108,7 @@ dat.do_fit(method="ElasticNet",alpha=1,l1_ratio=0.05)
 res = dat.get_res()
 
 # evaluation
-val_df = pd.read_csv('D:/GdriveSymbol/notebook/dry/Deconvolution/230906_revise/results/231002_sc_pseudo/sc10cell_proportion_df.csv',index_col=0).T
+val_df = pd.read_csv('D:/GdriveSymbol/notebook/dry/Deconvolution/230906_revise/results/231002_sc_pseudo/sc10cell_proportion_fixwhole.csv',index_col=0).T
 # validation cell type selection
 """
 val_df = val_df.loc[['Neutrophil','Monocyte','B','CD8','NK','Kupffer']]
@@ -109,40 +127,23 @@ ev.evaluate(dec_names=[["Monocyte"]],
 ev.evaluate(dec_names=[["NK"]],
             val_names=[["NK"]],title="NK cells",do_plot=True,simple=True,eval_all=False,dpi=100)
 
-# %%
-"""
-- Neutrophils
-neu_good = [0.939, 0.9043, 0.8771, 0.9309, 0.9008]
-neu_bad = [0.8575, 0.8172, 0.8284, 0.8232, 0.828]
-neu_baseline = 0.926
-
-- Monocytes
-mon_good = [0.7317, 0.8167, 0.7857, 0.8096, 0.7755]
-mon_bad = [0.75, 0.6622, 0.7029, 0.727, 0.6771]
-mon_baseline = 0.941
-
-- NK cells
-nk_good = [0.9, 0.8949, 0.8897, 0.9048, 0.896]
-nk_bad = [0.878, 0.7771, 0.8856, 0.87, 0.6468]
-nk_baseline = 0.911
-"""
 
 # %% barplot
-neu_list = [[0.939, 0.9043, 0.8771, 0.9309, 0.9008],[0.8575, 0.8172, 0.8284, 0.8232, 0.828]]
-mon_list = [[0.7317, 0.8167, 0.7857, 0.8096, 0.7755],[0.75, 0.6622, 0.7029, 0.727, 0.6771]]
-nk_list = [[0.9, 0.8949, 0.8897, 0.9048, 0.896],[0.878, 0.7771, 0.8856, 0.87, 0.6468]]
+neu_list = [[0.9252, 0.8983, 0.821, 0.927, 0.8563, 0.9426, 0.862, 0.9165, 0.9369, 0.9462],[0.8814, 0.777, 0.7847, 0.8078, 0.8182, 0.8476, 0.8473, 0.8292, 0.8365, 0.7905]]
+mon_list = [[0.7514, 0.8675, 0.8352, 0.8116, 0.8286, 0.732, 0.7682, 0.8426, 0.8263, 0.7587],[0.8053, 0.6648, 0.8033, 0.8173, 0.7425, 0.9161, 0.9023, 0.8778, 0.8837, 0.896]]
+nk_list = [[0.9047, 0.8986, 0.8936, 0.9049, 0.9074, 0.9069, 0.9004, 0.9054, 0.9021, 0.9009],[0.9026, 0.8617, 0.9061, 0.8996, 0.684, 0.8987, 0.8873, 0.7669, 0.7778, 0.7544]]
 
 # plot
 data = [neu_list,mon_list,nk_list]
 cells = ['Neutrophils', 'Monocytes', 'NK']
-names = ['Top 5', 'Bottom 5']
+names = ['Top 10', 'Bottom 10']
 color = ['tab:blue','tab:orange']
-baseline = [0.926,0.941,0.911]
+baseline = [0.882,0.902,0.923]
 
 fig = plt.figure(figsize=(8*4,6*1),dpi=300)
 for idx,data_list in enumerate(data):
     ax = fig.add_subplot(1,4,idx+1)
-    df = pd.DataFrame({'Top 5':data_list[0],'Bottom 5':data_list[1]})
+    df = pd.DataFrame({'Top 10':data_list[0],'Bottom 10':data_list[1]})
     error_bar_set = dict(lw=1,capthick=1,capsize=20)
     ax.bar([0,1],df.mean(),yerr=df.std(),tick_label=df.columns,error_kw=error_bar_set,color=color,width=0.5)
     # jitter plot

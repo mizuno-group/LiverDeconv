@@ -86,7 +86,7 @@ def plot_value_corr(deconv_df,val_df,dec_name=["CD4","CD8"],val_name=["abT"],sor
         pass
     return total_x,total_y,total_cor
 
-def plot_simple_corr(deconv_df,val_df,dec_name=["CD4"],val_name=["CD4T"],do_plot=True,sep=True,do_print=False,dpi=300):
+def plot_simple_corr(deconv_df,val_df,dec_name=["CD4"],val_name=["CD4T"],do_plot=True,title=None,do_print=False,dpi=300):
     """
     Correlation Scatter Plotting
     Format of both input dataframe is as follows
@@ -132,7 +132,10 @@ def plot_simple_corr(deconv_df,val_df,dec_name=["CD4"],val_name=["CD4T"],do_plot
         plt.gca().xaxis.set_ticks_position('bottom')
         ax.set_axisbelow(True)
         ax.grid(color="#ababab",linewidth=0.5)
-        plt.title(str(dec_name)+" vs "+str(val_name))
+        if title is None:
+            plt.title(str(dec_name)+" vs "+str(val_name))
+        else:
+            plt.title(title)
         plt.show()
     else:
         pass
