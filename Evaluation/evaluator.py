@@ -95,7 +95,7 @@ class Evaluator():
             X2 = []
             labels = []
             for i in range(len(dec_names)):
-                cor,x1,x2,label = p4v.plot_simple_corr(deconv_res,target_val_ref,dec_name=dec_names[i],val_name=val_names[i],do_plot=do_plot,dpi=dpi)
+                cor,x1,x2,label = p4v.plot_simple_corr(deconv_res,target_val_ref,dec_name=dec_names[i],val_name=val_names[i],do_plot=do_plot,title=title,dpi=dpi)
                 X1.append(x1)
                 X2.append(x2)
                 labels.append(label)
