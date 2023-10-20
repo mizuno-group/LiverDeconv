@@ -133,7 +133,7 @@ class LiverDeconv():
         self.sig_ref = ref_inter_df.loc[signature]
         final_ref = self.__df_median(self.sig_ref,sep=sep)
         if do_plot:
-            sns.clustermap(final_ref,col_cluster=False,z_score=0)
+            sns.clustermap(final_ref,col_cluster=False,z_score=0,figsize=(6, 6))
             plt.show()
         # FIXME:sort gene name
         s_gene = sorted(final_ref.index.tolist())
