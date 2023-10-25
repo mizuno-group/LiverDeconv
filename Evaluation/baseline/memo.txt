@@ -1,0 +1,29 @@
+■ CIBERSORT (log scale)
+We processed at [https://cibersortx.stanford.edu/runcibersortx.php].
+- Default parameters were used.
+
+■ DCQ (log scale)
+'''
+library(ADAPTS)
+df_mix = read.csv(file_mix,row.names = 1)
+df_ref = read.csv(file_ref,row.names = 1)
+results <- estCellPercent.DCQ(refExpr=df_ref, geneExpr=df_mix)
+'''
+- 'LM13 (13 immune cell types) was selected as signature matrix'
+- Default parameters were used.
+
+■ EPIC (linear scale)
+We processed at https://epic.gfellerlab.org/.
+- Converted to tsv format and upload as mixture file.
+- 'LM13 (13 immune cell types) was selected as signature matrix'
+
+■ FARDEEP (log scale)
+'''
+library(FARDEEP)
+results = fardeep(df_ref, df_mix)
+coef = results$abs.beta
+coef_df <- data.frame(coef)
+'''
+- 'LM13 (13 immune cell types) was selected as signature matrix'
+- Default parameters were used.
+- lognorm=True (default)
