@@ -14,15 +14,13 @@ liver-specific deconvolution model for mouse
 │  │  facs_true_population.csv
 │  │  mix_processed.csv
 │  │  ref_13types.csv
+│  │  tpm_mix_raw.csv
 │  │
-│  ├─info
-│  │      blood_biochemistry_values.csv
-│  │      Sample_Summary.xlsx
-│  │
-│  └─raw
+│  └─info
 │          batch_info.csv
+│          blood_biochemistry_values.csv
 │          Mouse_stable2MouseMGI.csv
-│          tpm_mix_raw.csv
+│          Sample_Summary.xlsx
 ```
 
 ## Sample Code
