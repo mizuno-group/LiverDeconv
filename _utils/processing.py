@@ -14,7 +14,7 @@ from tqdm import tqdm
 from combat.pycombat import pycombat
 import matplotlib.pyplot as plt
 
-def annotation(df,ref_df, places:list=[0, 1]):
+def annotation(df,ref_df,places:list=[0, 1]):
     """
     annotate row IDs to gene names
     Parameters
