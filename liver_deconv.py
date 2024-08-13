@@ -131,7 +131,10 @@ class LiverDeconv():
         signature = self.get_genes() # union of each reference cell's signatures
         print("signature genes :",len(signature))
         self.sig_ref = ref_inter_df.loc[signature]
-        final_ref = self.__df_median(self.sig_ref,sep=sep)
+        if sep == "":
+            final_ref = self.sig_ref
+        else:
+            final_ref = self.__df_median(self.sig_ref,sep=sep)
         if do_plot:
             sns.clustermap(final_ref,col_cluster=False,z_score=0,figsize=(6, 6))
             plt.show()
@@ -160,19 +163,28 @@ class LiverDeconv():
         df_c = copy.deepcopy(self.df_all)
         #cluster, self.samples = self.sepmaker(df=df_c,delimiter=sep_ind)
         #print(cluster)
-        immunes = [t.split(sep_ind)[0] for t in df_c.columns.tolist()]
+        if sep_ind=="":
+            immunes = df_c.columns.tolist()
+        else:
+            immunes = [t.split(sep_ind)[0] for t in df_c.columns.tolist()]
         df_c.columns = immunes
         self.min_FC = pd.DataFrame()
         self.pickup_genes_list = []
         self.__pickup_genes = []
         for c in sorted(list(set(immunes))):
-            self.df_target = pd.DataFrame(df_c[c]) # FIXME: 230117 
+            if sep_ind=="":
+                self.df_target = pd.DataFrame(df_c[[c]])  # FIXME: 240813 
+            else:
+                self.df_target = pd.DataFrame(df_c[c]) # FIXME: 230117 
             self.tmp_summary = pd.DataFrame()
             for o in sorted(list(set(immunes))):
                 if o == c:
                     pass
                 else:
-                    self.df_else = df_c[o]
+                    if sep_ind =="":
+                        self.df_else = df_c[[o]]
+                    else:
+                        self.df_else = df_c[o]
                     self.__logFC()
                     df_logFC = self.df_logFC
                     df_logFC.columns = [o]
@@ -227,7 +239,7 @@ class LiverDeconv():
         while len(pickup_genes)<number:
             if len(genes)<i+1:
                 pickup_genes = pickup_genes+[np.nan]*number
-                if  verbose:
+                if verbose:
                     print('not enough genes picked up')
             elif df_CV.iloc[i,0] < limit_CV and df_minFC.iloc[i,0] > limit_FC:
                 ap(genes[i])
