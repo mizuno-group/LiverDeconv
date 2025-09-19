@@ -6,9 +6,14 @@ liver-specific deconvolution model for mouse
 ## Data
 - RNA-seq data (fastq files) are available in GEO dataset. The accession number is [GSE237801](https://www.ncbi.nlm.nih.gov/geo/query/acc.cgi?acc=GSE237801).
 - ```/Data``` directory
-  -  ```facs_true_population.csv```: The ground truth cell type proportion matrix obtained by flow cytometry. (***P***)
-  -  ```mix_processed.csv```: Bulk gene expression for 11588 genes across 57 mouse liver injury samples. (***Y***)
-  -  ```ref_13types.csv```: Specific gene expression profiles for 13 cell types. (***X***)
+  -  **★```facs_true_population.csv```**: The ground truth cell type proportion matrix obtained by flow cytometry. (***P***)
+  -  **★```mix_processed.csv```**: Bulk gene expression for 11588 genes across 57 mouse liver injury samples. (***Y***)
+  -  ```ref_13types.csv```: Specific gene expression profiles for 13 cell types.
+- ```SupplementaryFileS1.xlsx```: All cell name combinations including top 10 and bottom 10 used.
+- **★ ```SupplementaryFileS2.xlsx```**: Bulk RNA-Seq-derived reference, a total of 503 DEGs across 13 cell types. (***X***)
+  - The output of [Sample_Codes/2_simple_deconv_with_LM13.ipynb](https://github.com/mizuno-group/LiverDeconv/blob/main/Sample_Codes/2_simple_deconv_with_LM13.ipynb)
+  - Used as the reference for benchmarking reference-based methods, including CIBERSORT
+- ```SupplementaryFileS3.xlsx```: scRNA-Seq-derived reference a total of 184 DEGs across 10 cell types.
 ```
 ├─Data
 │  │  facs_true_population.csv
@@ -21,6 +26,10 @@ liver-specific deconvolution model for mouse
 │          blood_biochemistry_values.csv
 │          Mouse_stable2MouseMGI.csv
 │          Sample_Summary.xlsx
+│ 
+├─SupplementaryFileS1.xlsx
+├─SupplementaryFileS2.xlsx
+├─SupplementaryFileS3.xlsx
 ```
 
 ## Sample Code
@@ -31,15 +40,23 @@ liver-specific deconvolution model for mouse
   - ```3_reference_comb_optimization.ipynb```: provides an example of reference optimization in the paper.
 
 ## Publication
-- peer-reviewed article  
-    - Not yet  
+- [peer-reviewed article](https://academic.oup.com/nargab/article/6/1/lqad111/7511730)
 - [preprint](https://www.biorxiv.org/content/10.1101/2023.04.19.537436v3)  
 
 
 ## Citation
 Please cite the following if you use any contents of this repository:  
   
-Azuma I<sup>\*</sup>, Mizuno T<sup>*,§</sup>, Morita K, Kusuhara H. Investigation of the usefulness of liver-specific deconvolution method toward legacy data utilization. bioRxiv 2023.04.19.537436; doi: https://doi.org/10.1101/2023.04.19.537436 0 Citations  
+```
+@article{
+    title={Investigation of the usefulness of liver-specific deconvolution method by establishing a liver benchmark dataset},
+    author={Azuma I., Mizuno T., Morita K., Suzuki Y., & Kusuhara H.},
+    journal={NAR Genomics and Bioinformatics},
+    doi={10.1093/nargab/lqad111},
+    URL={https://academic.oup.com/nargab/article/6/1/lqad111/7511730},
+    year={2024}
+}
+```
 
 ## Authors
 - [Iori Azuma](https://github.com/groovy-phazuma)  
