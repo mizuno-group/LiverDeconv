@@ -102,7 +102,10 @@ class Deg_Multi_FC():
         df_c = copy.deepcopy(self.df_all)
         #cluster, self.samples = self.sepmaker(df=df_c,delimiter=sep_ind)
         #print(cluster)
-        immunes = [t.split(sep_ind)[0] for t in df_c.columns.tolist()]
+        if sep_ind == "":
+            immunes = df_c.columns.tolist()
+        else:
+            immunes = [t.split(sep_ind)[0] for t in df_c.columns.tolist()]
         df_c.columns = immunes
         self.min_FC = pd.DataFrame()
         self.pickup_genes_list = []
